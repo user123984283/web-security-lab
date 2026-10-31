@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вхід до інформаційної системи</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #eef3fa; font-family: Arial, sans-serif; color: #17233b; }
+    .panel { width: min(420px, calc(100% - 32px)); background: white; padding: 32px; border-radius: 16px; box-shadow: 0 12px 40px #1b31501a; }
+    h2 { margin: 0 0 12px; font-size: 24px; }
+    .subtitle { margin: 0 0 25px; color: #5c6b80; font-size: 14px; }
+    label { display: block; margin: 15px 0 7px; font-weight: 600; font-size: 14px; }
+    input { width: 100%; padding: 12px; border: 1px solid #b9c7d8; border-radius: 8px; font-size: 15px; }
+    input:focus { outline: 2px solid #8db8fa; border-color: #3069bc; }
+    .show { background: none; border: none; color: #245db1; padding: 9px 0; cursor: pointer; font-size: 13px; }
+    .submit { width: 100%; margin-top: 16px; padding: 13px; border: 0; border-radius: 8px; background: #245db1; color: white; font-size: 16px; cursor: pointer; }
+    .submit:hover { background: #174785; }
+    #message { margin: 17px 0 0; min-height: 22px; font-size: 14px; }
+    .error { color: #b42318; } .success { color: #087443; }
+  </style>
+</head>
+<body>
+  <main class="panel">
+    <h2>Вхід до інформаційної системи</h2>
+    <p class="subtitle">Введіть електронну пошту та пароль для перевірки форми.</p>
+    <form id="loginForm" novalidate>
+      <label for="email">Електронна пошта</label>
+      <input id="email" name="email" type="email" placeholder="name@example.com" required autocomplete="email">
+      <label for="password">Пароль</label>
+      <input id="password" name="password" type="password" minlength="8" required autocomplete="current-password" placeholder="Не менше 8 символів">
+      <button class="show" type="button" id="togglePassword" aria-pressed="false">Показати пароль</button>
+      <button class="submit" type="submit">Увійти</button>
+    </form>
+    <p id="message" role="status" aria-live="polite"></p>
+  </main>
+  <script>
+    const form = document.getElementById('loginForm');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const message = document.getElementById('message');
+    const toggle = document.getElementById('togglePassword');
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = type;
+    }
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault(); // Демонстраційна форма: дані нікуди не надсилаються.
+      if (email.validity.valueMissing) {
+        showMessage('Помилка: введіть електронну пошту.', 'error');
+        email.focus();
+      } else if (email.validity.typeMismatch) {
+        showMessage('Помилка: введіть коректну електронну адресу.', 'error');
+        email.focus();
+      } else if (password.validity.valueMissing) {
+        showMessage('Помилка: введіть пароль.', 'error');
+        password.focus();
+      } else if (password.value.length < 8) {
+        showMessage('Помилка: пароль повинен містити не менше 8 символів.', 'error');
+        password.focus();
+      } else {
+        showMessage('Успіх: дані пройшли перевірку форми.', 'success');
+      }
+    });
+
+    toggle.addEventListener('click', function () {
+      const isHidden = password.type === 'password';
+      password.type = isHidden ? 'text' : 'password';
+      toggle.textContent = isHidden ? 'Приховати пароль' : 'Показати пароль';
+      toggle.setAttribute('aria-pressed', String(isHidden));
+    });
+  </script>
+</body>
+</html>
