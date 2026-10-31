@@ -37,6 +37,16 @@
   <script>
     const form = document.getElementById('loginForm');
     const email = document.getElementById('email');
+    email.addEventListener('input', function () {
+
+    if (email.validity.typeMismatch) {
+        message.textContent =
+            'Помилка: введіть коректну електронну адресу.';
+        message.style.color = 'red';
+    } else {
+        message.textContent = '';
+    }
+});
     const password = document.getElementById('password');
     const message = document.getElementById('message');
     const toggle = document.getElementById('togglePassword');
